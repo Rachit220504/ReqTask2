@@ -1,0 +1,61 @@
+#!/bin/bash
+
+#question_1
+
+read -p "Enter directory: " directory
+mkdir -p "Modified_$directory"
+find "$directory" -type f -name "*.txt" -exec sh -c 'cp "$1" "$2/$(basename "$1" .txt).bak"' sh {} "Modified_$directory" \;
+
+#question_2
+
+read -p "Enter directory: " directory
+for file in "Modified_$directory"/*.bak; do
+    echo "$(cat "$file") $(date '+%Y-%m-%d %H:%M:%S')" > "$file"
+done
+
+#question_3
+
+read -p "Enter the length of the password: " length
+password=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w "$length" | head -n 1)
+echo "Generated password: $password"
+
+#question_3(different_method)
+read -p "Enter the length of the password: " length
+password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w "$length" | head -n 1)
+echo "Generated password: $password"
+
+#question_4
+
+read -p "Enter the file name: " file
+matrix=()
+while read -ra row; do
+    matrix+=("${row[@]}")
+done < "$file"
+transposed=()
+for ((i=0; i<${#matrix[0]}; i++)); do
+    transposed_row=()
+    for ((j=0; j<${#matrix[@]}; j++)); do
+        transposed_row+=("${matrix[$j]:$i:1}")
+    done
+    transposed+=("${transposed_row[@]}")
+done
+for row in "${transposed[@]}"; do
+    echo "$row"
+done
+
+#question_5
+
+ROWS=5
+COLS=5
+workspace=()
+for ((i=0; i<ROWS; i++)); do
+    row=()
+    for ((j=0; j<COLS; j++)); do
+        row+=("1")
+    done
+    workspace+=("${row[@]}")
+done
+insert_obstacle() {
+    local row=$
+
+
